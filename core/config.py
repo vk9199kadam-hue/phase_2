@@ -4,8 +4,14 @@ Configuration, Thresholds, and Constants for SIH26188 Phase 2 VisionX
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STORAGE_DIR = os.path.join(BASE_DIR, "storage")
-SAMPLE_DATA_DIR = os.path.join(STORAGE_DIR, "sample_data")
+STATIC_SAMPLE_DATA_DIR = os.path.join(BASE_DIR, "storage", "sample_data")
+
+if os.environ.get("VERCEL"):
+    STORAGE_DIR = "/tmp/storage"
+else:
+    STORAGE_DIR = os.path.join(BASE_DIR, "storage")
+
+SAMPLE_DATA_DIR = STATIC_SAMPLE_DATA_DIR
 REGIONAL_CACHE_DIR = os.path.join(STORAGE_DIR, "regional_cache")
 BLOCKCHAIN_LEDGER_FILE = os.path.join(STORAGE_DIR, "blockchain_ledger.json")
 

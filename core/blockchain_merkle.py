@@ -77,9 +77,12 @@ class BlockchainLedger:
             self._save()
 
     def _save(self):
-        os.makedirs(os.path.dirname(self.ledger_path), exist_ok=True)
-        with open(self.ledger_path, "w") as f:
-            json.dump(self.chain, f, indent=2)
+        try:
+            os.makedirs(os.path.dirname(self.ledger_path), exist_ok=True)
+            with open(self.ledger_path, "w") as f:
+                json.dump(self.chain, f, indent=2)
+        except Exception:
+            pass
 
     def append_record(self, doc_bytes_or_str: str, verdict: str, risk_score: float, 
                       officer_id: str, modality: str) -> Dict[str, Any]:

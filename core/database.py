@@ -49,27 +49,39 @@ INITIAL_ENROLLED_RECORDS = {
 
 class EnrolledDatabase:
     def __init__(self):
-        os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
-        self._init_db()
+        try:
+            os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
+            self._init_db()
+        except Exception:
+            pass
 
     def _init_db(self):
-        if not os.path.exists(DB_FILE):
-            with open(DB_FILE, "w") as f:
-                json.dump(INITIAL_ENROLLED_RECORDS, f, indent=2)
+        try:
+            if not os.path.exists(DB_FILE):
+                with open(DB_FILE, "w") as f:
+                    json.dump(INITIAL_ENROLLED_RECORDS, f, indent=2)
+        except Exception:
+            pass
 
     def find_by_uid(self, uid_clean: str) -> Optional[Dict[str, Any]]:
         clean_key = "".join([c for c in str(uid_clean) if c.isdigit()])
         try:
-            with open(DB_FILE, "r") as f:
-                records = json.load(f)
+            if os.path.exists(DB_FILE):
+                with open(DB_FILE, "r") as f:
+                    records = json.load(f)
+            else:
+                records = INITIAL_ENROLLED_RECORDS
             return records.get(clean_key)
         except Exception:
-            return None
+            return INITIAL_ENROLLED_RECORDS.get(clean_key)
 
     def upsert_record(self, uid_clean: str, record: Dict[str, Any]):
         try:
-            with open(DB_FILE, "r") as f:
-                records = json.load(f)
+            if os.path.exists(DB_FILE):
+                with open(DB_FILE, "r") as f:
+                    records = json.load(f)
+            else:
+                records = INITIAL_ENROLLED_RECORDS
             records[uid_clean] = record
             with open(DB_FILE, "w") as f:
                 json.dump(records, f, indent=2)

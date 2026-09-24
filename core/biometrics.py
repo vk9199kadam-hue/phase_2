@@ -11,7 +11,14 @@ from typing import Dict, Any, Tuple, Optional
 from core.config import BIOMETRIC_COSINE_SIMILARITY_MIN, BIOMETRIC_AGE_COMPENSATION_FACTOR
 
 # OpenCV Haar Cascade for robust edge-level face detection
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+face_cascade = None
+try:
+    if hasattr(cv2, 'data') and hasattr(cv2.data, 'haarcascades'):
+        cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+        if os.path.exists(cascade_path):
+            face_cascade = cv2.CascadeClassifier(cascade_path)
+except Exception:
+    face_cascade = None
 
 def detect_and_crop_face(image_bgr: np.ndarray) -> Tuple[Optional[np.ndarray], Optional[tuple]]:
     """
@@ -20,27 +27,23 @@ def detect_and_crop_face(image_bgr: np.ndarray) -> Tuple[Optional[np.ndarray], O
     if image_bgr is None:
         return None, None
     try:
-        gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(60, 60))
-        if len(faces) == 0:
-            # Fallback: ID portrait ROI crop
-            h, w = image_bgr.shape[:2]
-            return image_bgr[int(h*0.2):int(h*0.8), int(w*0.05):int(w*0.4)], (int(w*0.05), int(h*0.2), int(w*0.4), int(h*0.8))
-
-        # Pick largest face
-        largest = max(faces, key=lambda r: r[2] * r[3])
-        x, y, w_f, h_f = largest
-        # Add slight margin
-        pad_x = int(w_f * 0.1)
-        pad_y = int(h_f * 0.1)
-        h_img, w_img = image_bgr.shape[:2]
-        x1 = max(0, x - pad_x)
-        y1 = max(0, y - pad_y)
-        x2 = min(w_img, x + w_f + pad_x)
-        y2 = min(h_img, y + h_f + pad_y)
+        h, w = image_bgr.shape[:2]
+        if face_cascade is not None and not face_cascade.empty():
+            gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(60, 60))
+            if len(faces) > 0:
+                largest = max(faces, key=lambda r: r[2] * r[3])
+                x, y, w_f, h_f = largest
+                pad_x = int(w_f * 0.1)
+                pad_y = int(h_f * 0.1)
+                x1 = max(0, x - pad_x)
+                y1 = max(0, y - pad_y)
+                x2 = min(w, x + w_f + pad_x)
+                y2 = min(h, y + h_f + pad_y)
+                return image_bgr[y1:y2, x1:x2], (x1, y1, x2, y2)
         
-        cropped = image_bgr[y1:y2, x1:x2]
-        return cropped, (x1, y1, x2, y2)
+        # Fallback portrait ROI
+        return image_bgr[int(h*0.2):int(h*0.8), int(w*0.05):int(w*0.4)], (int(w*0.05), int(h*0.2), int(w*0.4), int(h*0.8))
     except Exception:
         return None, None
 

@@ -45,9 +45,15 @@ app.add_middleware(
 
 # Mount static files
 STATIC_DIR = os.path.join(BASE_DIR, "static")
-os.makedirs(STATIC_DIR, exist_ok=True)
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-app.mount("/storage", StaticFiles(directory=STORAGE_DIR), name="storage")
+STORAGE_DIR_READ = os.path.join(BASE_DIR, "storage")
+
+try:
+    if os.path.exists(STATIC_DIR):
+        app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+    if os.path.exists(STORAGE_DIR_READ):
+        app.mount("/storage", StaticFiles(directory=STORAGE_DIR_READ), name="storage")
+except Exception:
+    pass
 
 
 # --- HELPER FUNCTIONS ---
