@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Body
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
@@ -74,18 +74,34 @@ def load_image_from_bytes_or_path(image_bytes: Optional[bytes] = None, path_or_n
 # --- REST API ENDPOINTS ---
 
 @app.get("/")
+@app.get("/api")
+@app.get("/api/index.py")
+@app.get("/api/index")
 def get_index():
-    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse("<h1>VisionX Border Screening Platform</h1>")
 
 @app.get("/manifest.json")
+@app.get("/api/manifest.json")
 def get_manifest():
-    return FileResponse(os.path.join(STATIC_DIR, "manifest.json"))
+    m_path = os.path.join(STATIC_DIR, "manifest.json")
+    if os.path.exists(m_path):
+        return FileResponse(m_path)
+    return JSONResponse({"name": "VisionX"})
 
 @app.get("/sw.js")
+@app.get("/api/sw.js")
 def get_sw():
-    return FileResponse(os.path.join(STATIC_DIR, "sw.js"), media_type="application/javascript")
+    sw_path = os.path.join(STATIC_DIR, "sw.js")
+    if os.path.exists(sw_path):
+        return FileResponse(sw_path, media_type="application/javascript")
+    return Response(content="", media_type="application/javascript")
 
 @app.get("/api/status")
+@app.get("/status")
 def get_system_status():
     chain_meta = ledger.verify_chain_integrity()
     offline_meta = offline_mgr.get_bundle_info()
@@ -100,6 +116,7 @@ def get_system_status():
     }
 
 @app.get("/api/samples")
+@app.get("/samples")
 def get_demo_samples():
     """Returns list of preloaded samples for 1-click evaluation"""
     return {
@@ -178,6 +195,7 @@ def get_demo_samples():
 
 # --- PIPELINE 1: FIXED STRUCTURED ID (AADHAAR) ---
 @app.post("/api/verify/fixed_id")
+@app.post("/verify/fixed_id")
 async def verify_fixed_id(
     file: Optional[UploadFile] = File(None),
     sample_id: Optional[str] = Form(None),
@@ -297,6 +315,7 @@ async def verify_fixed_id(
 
 # --- PIPELINE 2: UNSTRUCTURED DATA (VISA / PERMIT) ---
 @app.post("/api/verify/unstructured_visa")
+@app.post("/verify/unstructured_visa")
 async def verify_unstructured_visa(
     sample_id: Optional[str] = Form(None),
     raw_text: Optional[str] = Form(None),
@@ -339,6 +358,7 @@ async def verify_unstructured_visa(
 
 # --- PIPELINE 3: NFC DIGITAL CHIP READING (e-PASSPORT) ---
 @app.post("/api/verify/nfc_chip")
+@app.post("/verify/nfc_chip")
 async def verify_nfc_chip(payload: Dict[str, Any] = Body(...)):
     start_time = time.time()
     nfc_result = parse_and_verify_nfc_payload(payload)
@@ -366,6 +386,7 @@ async def verify_nfc_chip(payload: Dict[str, Any] = Body(...)):
 
 # --- PIPELINE 4: OFFLINE ZERO-INTERNET PRIMARY KEY LOOKUP ---
 @app.post("/api/verify/offline_lookup")
+@app.post("/verify/offline_lookup")
 async def verify_offline_lookup(payload: Dict[str, Any] = Body(...)):
     primary_key = payload.get("primary_key", "")
     officer_id = payload.get("officer_id", DEFAULT_OFFICER_GUARD)
@@ -385,12 +406,14 @@ async def verify_offline_lookup(payload: Dict[str, Any] = Body(...)):
     }
 
 @app.get("/api/offline/bundle_info")
+@app.get("/offline/bundle_info")
 def get_offline_bundle_info():
     return offline_mgr.get_bundle_info()
 
 
 # --- ROLE 2: SECURITY OFFICER COMMAND & BLOCKCHAIN EXPLORER ---
 @app.get("/api/blockchain/ledger")
+@app.get("/blockchain/ledger")
 def get_blockchain_ledger(limit: int = 50):
     return {
         "total_blocks": len(ledger.chain),
@@ -398,10 +421,12 @@ def get_blockchain_ledger(limit: int = 50):
     }
 
 @app.get("/api/blockchain/verify")
+@app.get("/blockchain/verify")
 def verify_blockchain_chain():
     return ledger.verify_chain_integrity()
 
 @app.post("/api/officer/override")
+@app.post("/officer/override")
 def record_officer_override(payload: Dict[str, Any] = Body(...)):
     block_index = payload.get("block_index")
     override_action = payload.get("action", "OVERRIDE_TO_GREEN")
