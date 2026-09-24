@@ -1,0 +1,36 @@
+{
+  "001100220033": {
+    "uid_masked": "XXXX-XXXX-0033",
+    "raw_uid": "001100220033",
+    "name": "Atharv",
+    "dob": "04-01-1995",
+    "gender": "Male",
+    "photo_url": "/static/samples/atharv_face.png",
+    "enrolment_date": "2024-03-15",
+    "status": "VALID",
+    "watchlist": false
+  },
+  "987654321002": {
+    "uid_masked": "XXXX-XXXX-1002",
+    "raw_uid": "987654321002",
+    "name": "Dhruva",
+    "dob": "02-03-1993",
+    "gender": "Male",
+    "photo_url": "/static/samples/dhruva_face.png",
+    "enrolment_date": "2023-11-20",
+    "status": "VALID",
+    "watchlist": false
+  },
+  "123412345555": {
+    "uid_masked": "XXXX-XXXX-5555",
+    "raw_uid": "123412345555",
+    "name": "Haroon",
+    "dob": "07-03-1990",
+    "gender": "Male",
+    "photo_url": "/static/samples/haroon_face.png",
+    "enrolment_date": "2022-08-10",
+    "status": "FLAGGED",
+    "watchlist": true,
+    "flag_reason": "COUNTERFEIT_RECORD_DUPLICATION"
+  }
+}

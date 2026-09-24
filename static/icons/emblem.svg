@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120">
+  <g fill="#EA580C">
+    <!-- Ashoka Lion Capital Silhouette Representation -->
+    <path d="M50 5 C40 5 32 12 32 22 C32 30 38 36 44 38 C42 42 38 46 32 50 C26 54 24 62 26 70 C28 78 36 84 45 84 L55 84 C64 84 72 78 74 70 C76 62 74 54 68 50 C62 46 58 42 56 38 C62 36 68 30 68 22 C68 12 60 5 50 5 Z M42 20 C42 16 46 12 50 12 C54 12 58 16 58 20 C58 24 54 28 50 28 C46 28 42 24 42 20 Z" />
+    <!-- Base Abacus -->
+    <rect x="20" y="88" width="60" height="8" rx="2" fill="#1E3A8A" />
+    <!-- Ashoka Chakra in Center -->
+    <circle cx="50" cy="92" r="6" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.5" />
+    <circle cx="50" cy="92" r="1.5" fill="#1E3A8A" />
+    <!-- Pedestal Base -->
+    <path d="M15 100 L85 100 L80 110 L20 110 Z" fill="#EA580C" />
+    <!-- Motto: Satyameva Jayate -->
+    <text x="50" y="118" font-family="'Noto Sans', 'Inter', sans-serif" font-size="6" font-weight="bold" text-anchor="middle" fill="#0F172A">सत्यमेव जयते</text>
+  </g>
+</svg>

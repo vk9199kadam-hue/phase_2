@@ -1,0 +1,51 @@
+{
+  "sector_id": "SSB-IN-NPL-SECTOR-04",
+  "version": "2026.09.24-R1",
+  "last_sync_timestamp": 1790240361.493618,
+  "records": {
+    "001100220033": {
+      "primary_key": "001100220033",
+      "name": "Atharv",
+      "dob": "04-01-1995",
+      "gender": "Male",
+      "status": "CLEARANCE_ACTIVE",
+      "flagged": false,
+      "face_hash": "a8f93bc10294e82b7c61d5",
+      "registered_sector": "SSB-IN-NPL-SECTOR-04",
+      "security_clearance": "GREEN"
+    },
+    "987654321002": {
+      "primary_key": "987654321002",
+      "name": "Dhruva",
+      "dob": "02-03-1993",
+      "gender": "Male",
+      "status": "CLEARANCE_ACTIVE",
+      "flagged": false,
+      "face_hash": "c71e9802bf145a990e1182",
+      "registered_sector": "SSB-IN-NPL-SECTOR-04",
+      "security_clearance": "GREEN"
+    },
+    "123412345555": {
+      "primary_key": "123412345555",
+      "name": "Haroon (FLAGGED)",
+      "dob": "07-03-1990",
+      "gender": "Male",
+      "status": "LOOKOUT_CIRCULAR_ACTIVE",
+      "flagged": true,
+      "flag_reason": "FORGERY_SUSPECT_WATCHLIST",
+      "registered_sector": "SSB-IN-NPL-SECTOR-04",
+      "security_clearance": "RED"
+    },
+    "110022003300": {
+      "primary_key": "110022003300",
+      "name": "John Loyal (FLAGGED)",
+      "dob": "01-01-1995",
+      "gender": "Male",
+      "status": "INVESTIGATION_PENDING",
+      "flagged": true,
+      "flag_reason": "PHOTO_SUBSTITUTION_FLAG",
+      "registered_sector": "SSB-IN-NPL-SECTOR-04",
+      "security_clearance": "RED"
+    }
+  }
+}

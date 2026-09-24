@@ -1,0 +1,46 @@
+[
+  {
+    "timestamp": 1790241345.891839,
+    "payload": {
+      "primary_key": "001100220033",
+      "officer_id": "GUARD_0482_SINGH",
+      "result": {
+        "found": true,
+        "offline_mode": true,
+        "primary_key": "001100220033",
+        "name": "Atharv",
+        "dob": "04-01-1995",
+        "gender": "Male",
+        "status": "CLEARANCE_ACTIVE",
+        "flagged": false,
+        "flag_reason": "None",
+        "verdict": "GREEN",
+        "risk_score": 10.0,
+        "latency_ms": 1.42,
+        "message": "Matched in Regional Offline Bundle"
+      }
+    }
+  },
+  {
+    "timestamp": 1790241345.928365,
+    "payload": {
+      "primary_key": "123412345555",
+      "officer_id": "GUARD_0482_SINGH",
+      "result": {
+        "found": true,
+        "offline_mode": true,
+        "primary_key": "123412345555",
+        "name": "Haroon (FLAGGED)",
+        "dob": "07-03-1990",
+        "gender": "Male",
+        "status": "LOOKOUT_CIRCULAR_ACTIVE",
+        "flagged": true,
+        "flag_reason": "FORGERY_SUSPECT_WATCHLIST",
+        "verdict": "RED",
+        "risk_score": 90.0,
+        "latency_ms": 0.3,
+        "message": "Matched in Regional Offline Bundle"
+      }
+    }
+  }
+]
