@@ -198,7 +198,7 @@ function selectSampleAadhaar(sample) {
   const placeholder = document.getElementById('idUploadPlaceholder');
   const box = document.getElementById('idIntakeBox');
 
-  preview.src = `/storage/sample_data/${sample.id}`;
+  preview.src = `/static/sample_data/${sample.id}`;
   preview.style.display = 'block';
   placeholder.style.display = 'none';
   box.classList.add('has-preview');
@@ -211,7 +211,7 @@ function selectSampleVisa(sample) {
   const placeholder = document.getElementById('visaUploadPlaceholder');
   const box = document.getElementById('visaIntakeBox');
 
-  preview.src = `/storage/sample_data/${sample.id}`;
+  preview.src = `/static/sample_data/${sample.id}`;
   preview.style.display = 'block';
   placeholder.style.display = 'none';
   box.classList.add('has-preview');
@@ -292,6 +292,10 @@ async function runFixedIdScreening() {
       body: formData
     });
     const data = await res.json();
+    if (!res.ok || data.detail || !data.risk_decision) {
+      alert('Screening error: ' + (data.detail || JSON.stringify(data)));
+      return;
+    }
     renderScreeningResults(data);
   } catch (err) {
     alert('Verification error: ' + err.message);
@@ -313,6 +317,10 @@ async function runVisaScreening() {
       body: formData
     });
     const data = await res.json();
+    if (!res.ok || data.detail || !data.visa_report) {
+      alert('Visa Screening error: ' + (data.detail || JSON.stringify(data)));
+      return;
+    }
     renderVisaResults(data);
   } catch (err) {
     alert('Visa Screening error: ' + err.message);
@@ -390,6 +398,10 @@ async function runNfcScreening() {
       body: JSON.stringify(payload)
     });
     const data = await res.json();
+    if (!res.ok || data.detail || !data.nfc_result) {
+      alert('NFC Screening error: ' + (data.detail || JSON.stringify(data)));
+      return;
+    }
     renderNfcResults(data);
   } catch (err) {
     alert('NFC error: ' + err.message);
@@ -414,6 +426,10 @@ async function runOfflineSearch() {
       body: JSON.stringify({ primary_key: uid, officer_id: 'GUARD_OFFLINE_01' })
     });
     const data = await res.json();
+    if (!res.ok || data.detail || !data.offline_result) {
+      alert('Offline search error: ' + (data.detail || JSON.stringify(data)));
+      return;
+    }
     renderOfflineResults(data);
   } catch (err) {
     alert('Offline lookup error: ' + err.message);
