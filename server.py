@@ -99,9 +99,6 @@ def load_image_from_bytes_or_path(image_bytes: Optional[bytes] = None, path_or_n
 # --- REST API ENDPOINTS ---
 
 @app.get("/")
-@app.get("/api")
-@app.get("/api/index.py")
-@app.get("/api/index")
 def get_index():
     index_path = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_path):
