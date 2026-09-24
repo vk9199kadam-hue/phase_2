@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionX — AI-Based Fake Identity & Document Screening System</title>
+  <meta name="description" content="Official Border Control & Identity Document Fraud Screening System for Smart India Hackathon 2026 (SIH26188)">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/static/icons/emblem.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Tricolor Stripe -->
+  <div class="tricolor-stripe">
+    <div class="saffron"></div>
+    <div class="white"></div>
+    <div class="green"></div>
+  </div>
+
+  <!-- Government Header -->
+  <header class="govt-header">
+    <div class="header-brand">
+      <img src="/static/icons/emblem.svg" alt="Emblem of India" class="emblem-img">
+      <div class="brand-text">
+        <h1>VISIONX — BORDER IDENTITY SCREENING</h1>
+        <div class="subtext">MINISTRY OF HOME AFFAIRS • SASHASTRA SEEMA BAL (SSB) • SIH26188</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="btnInstallApp" class="btn-secondary" style="display: flex; align-items: center; gap: 6px; border-color: var(--govt-orange); color: var(--govt-orange-dark); font-weight: bold;">
+        📲 Install App / APK
+      </button>
+      <div class="status-badge" id="connectionStatusBadge">
+        <span class="status-dot"></span> ONLINE / CLOUD LINKED
+      </div>
+      <div class="status-badge" style="background: #EFF6FF; color: #1E40AF; border-color: #BFDBFE;">
+        📍 <span id="sectorIdDisplay">SSB-IN-NPL-SECTOR-04</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Role Navigation Switcher -->
+  <nav class="role-nav">
+    <button class="role-tab-btn active" data-role="guard">
+      👮 BORDER GUARD / CHECKPOINT TERMINAL
+    </button>
+    <button class="role-tab-btn" data-role="officer">
+      🛡️ SECURITY OFFICER COMMAND & BLOCKCHAIN EXPLORER
+    </button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- ==================== ROLE 1: BORDER GUARD VIEW ==================== -->
+    <section id="guardView">
+      
+      <!-- Pipeline Mode Selector -->
+      <div class="pipeline-nav">
+        <button class="pipeline-btn active" data-pipeline="fixed_id">
+          <span>🆔 1. Fixed Structured ID (Aadhaar)</span>
+          <span class="pill-num">1</span>
+        </button>
+        <button class="pipeline-btn" data-pipeline="visa">
+          <span>📜 2. Unstructured Data (Visa / Permit)</span>
+          <span class="pill-num">2</span>
+        </button>
+        <button class="pipeline-btn" data-pipeline="nfc">
+          <span>📡 3. NFC Digital Chip (e-Passport)</span>
+          <span class="pill-num">3</span>
+        </button>
+        <button class="pipeline-btn" data-pipeline="offline">
+          <span>📴 4. Offline Regional Search (No Net)</span>
+          <span class="pill-num">4</span>
+        </button>
+      </div>
+
+      <!-- 1-Click Sample Presets Bar -->
+      <div class="portal-card sample-presets">
+        <div class="sample-presets-title">⚡ 1-Click Verification Test Presets (Real vs. Fake):</div>
+        <div class="sample-chips" id="samplePresetsContainer">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- Main Inspection Grid -->
+      <div class="screening-grid">
+        
+        <!-- Left Column: Input Modality Panels -->
+        <div class="portal-card">
+          
+          <!-- MODALITY 1: FIXED STRUCTURED ID -->
+          <div id="panelFixedId">
+            <div class="card-title">
+              <span>📷 Document & Live Camera Ingestion</span>
+              <label for="idFileInput" class="btn-secondary" style="cursor: pointer;">📁 Upload Image</label>
+              <input type="file" id="idFileInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="intake-box" id="idIntakeBox" onclick="document.getElementById('idFileInput').click()">
+              <div id="idUploadPlaceholder">
+                <div style="font-size: 2.2rem; margin-bottom: 8px;">🪪</div>
+                <strong>Click to Upload Document Scan</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Supports JPG, PNG, WebP or live camera capture</p>
+              </div>
+              <img id="idPreviewImg" class="preview-img" src="/storage/sample_data/aadhaar_real_atharv.png" alt="Card Preview" style="display: block;">
+            </div>
+
+            <button class="btn-primary" id="btnScanFixedId">
+              <span>🛡️ EXECUTE MULTI-SIGNAL INSPECTION</span>
+            </button>
+          </div>
+
+          <!-- MODALITY 2: UNSTRUCTURED VISA -->
+          <div id="panelVisa" style="display: none;">
+            <div class="card-title">
+              <span>📜 Consular Visa & Permit Ingestion</span>
+            </div>
+            <div class="intake-box" id="visaIntakeBox">
+              <div id="visaUploadPlaceholder" style="display: none;">
+                <strong>Upload Consular Visa Scan</strong>
+              </div>
+              <img id="visaPreviewImg" class="preview-img" src="/storage/sample_data/visa_real_employment.png" alt="Visa Preview" style="display: block;">
+            </div>
+            <button class="btn-primary" id="btnScanVisa">
+              <span>🔍 PARSE VISA NLP & VERIFY SEAL</span>
+            </button>
+          </div>
+
+          <!-- MODALITY 3: NFC DIGITAL CHIP -->
+          <div id="panelNfc" style="display: none;">
+            <div class="card-title">
+              <span>📡 ISO/IEC 14443 NFC Chip Interface</span>
+              <span class="status-badge" style="background: #EFF6FF; color: #1E40AF;">e-Passport Mode</span>
+            </div>
+            <div class="intake-box" style="cursor: default; text-align: left; align-items: stretch; justify-content: flex-start; padding: 16px;">
+              <div style="font-size: 0.85rem; font-family: monospace; line-height: 1.6;" id="nfcChipLog">
+                <span style="color: green;">✓ ISO/IEC 14443 Type A Target Detected</span><br>
+                UID: 04:A2:88:B1:99:C0<br>
+                SOD Hash: SHA-256 (Signed by DSCA_INDIA_01)<br>
+                DG1: MRZ TD3 Valid<br>
+                DG2: Biometric Face Hash: a7f839c...
+              </div>
+            </div>
+            <button class="btn-primary" id="btnTapNfc">
+              <span>📲 READ NFC CHIP & VALIDATE SOD SIGNATURE</span>
+            </button>
+          </div>
+
+          <!-- MODALITY 4: OFFLINE REGIONAL SEARCH -->
+          <div id="panelOffline" style="display: none;">
+            <div class="card-title">
+              <span>📴 Zero-Internet Regional Cache Search</span>
+              <span class="status-badge offline">Himalayan Border Mode</span>
+            </div>
+            <div style="margin-bottom: 16px;">
+              <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">
+                Enter 12-Digit Aadhaar Primary Key:
+              </label>
+              <input type="text" id="offlineUidInput" value="001100220033" placeholder="e.g. 001100220033" style="width: 100%; padding: 12px; font-size: 1.1rem; font-weight: 700; border: 2px solid var(--govt-orange); border-radius: 6px; letter-spacing: 2px;">
+            </div>
+            <button class="btn-primary" id="btnSearchOffline">
+              <span>⚡ QUERY LOCAL B-TREE CACHE (&lt;10ms)</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Verification Results & Triage -->
+        <div class="portal-card">
+          <div class="card-title">
+            <span>📊 Intelligent Decision Support System</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">AVER Risk Engine</span>
+          </div>
+
+          <!-- Decision Banner -->
+          <div class="decision-card green" id="decisionBadgeContainer">
+            <div>
+              <div class="triage-badge" id="triageVerdict">🟢 GREEN</div>
+              <div class="triage-score" id="triageScore">Risk Score: 12.0 / 100</div>
+            </div>
+            <div class="triage-right">
+              <div style="font-size: 0.78rem; font-weight: 800; text-transform: uppercase;">Officer Action</div>
+              <div style="font-size: 0.85rem; font-weight: 700;" id="triageStatusText">Recommended Clearance</div>
+            </div>
+          </div>
+
+          <!-- Reason Codes -->
+          <div style="margin-bottom: 14px;">
+            <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px;">Active Reason Codes:</div>
+            <div id="reasonCodesList">
+              <span class="reason-tag green-tag">ALL_SIGNALS_VERIFIED_AUTHENTIC</span>
+            </div>
+          </div>
+
+          <!-- Extracted Details & Forensic Proofs -->
+          <div id="extractedFieldsList">
+            <div class="data-row"><span class="label">Extracted Name</span><span class="value">Atharv</span></div>
+            <div class="data-row"><span class="label">Aadhaar UID</span><span class="value">0011 0022 0033</span></div>
+            <div class="data-row"><span class="label">Verhoeff Checksum</span><span class="value" style="color: green;">✓ VALID</span></div>
+            <div class="data-row"><span class="label">DOB / Gender</span><span class="value">04-01-1995 | Male</span></div>
+            <div class="data-row"><span class="label">ArcFace 512-D Biometrics</span><span class="value">94.5% (Age Compensated)</span></div>
+            <div class="data-row"><span class="label">Layout Forensics</span><span class="value">Layout & Typography Validated</span></div>
+            <div class="data-row"><span class="label">Blockchain Anchor</span><span class="value" style="font-family: monospace; font-size: 0.72rem;">#1 (7f49a02bc91...)</span></div>
+          </div>
+
+          <!-- Latency Meter -->
+          <div class="latency-bar-container">
+            <div class="latency-title">
+              <span>Pipeline Execution Latency</span>
+              <span id="latencyText">420 ms / 1960 ms Ceiling</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="latencyProgressFill" style="width: 22%;"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================== ROLE 2: SECURITY OFFICER VIEW ==================== -->
+    <section id="officerView" style="display: none;">
+      
+      <div class="portal-card" style="margin-bottom: 20px;">
+        <div class="card-title">
+          <span>⛓️ Immutable Blockchain Merkle Ledger (DPDP Act 2023 Compliant)</span>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span id="chainIntegrityStatus" style="font-size: 0.8rem;">🟢 <strong>CHAIN VERIFIED IMMUTABLE</strong></span>
+            <button class="btn-secondary" id="btnRefreshChain">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
+          Privacy Guarantee: In compliance with the Digital Personal Data Protection (DPDP) Act 2023, personal identity details remain strictly off-chain in encrypted storage. Only cryptographic document hashes, verification verdicts, and officer IDs are anchored to the blockchain.
+        </p>
+
+        <div class="blockchain-table-wrapper">
+          <table class="blockchain-table">
+            <thead>
+              <tr>
+                <th>Block #</th>
+                <th>Verdict</th>
+                <th>Risk Score</th>
+                <th>Modality</th>
+                <th>Officer ID</th>
+                <th>SHA-256 Merkle Block Hash</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="blockchainTableBody">
+              <!-- Dynamically populated via loadBlockchainLedger() -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Government Footer -->
+  <footer class="govt-footer">
+    <div>
+      <strong>VisionX Intelligent Decision Support System</strong> • Sashastra Seema Bal (SSB) • Smart India Hackathon 2026
+    </div>
+    <div class="dpdp-notice">
+      Compliant with DPDP Act 2023 • NIST CSF 2.0 • ICAO Doc 9303 Part 11 • Sub-2-Second Verification Budget
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
