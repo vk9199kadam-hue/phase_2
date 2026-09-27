@@ -3,6 +3,8 @@
 **Theme**: Blockchain & Cybersecurity | **Team**: SixBitss (VisionX)  
 **Target Agency**: Sashastra Seema Bal (SSB) / Ministry of Home Affairs
 
+🌐 **Live Vercel Web App**: [https://phase-2-olive.vercel.app/](https://phase-2-olive.vercel.app/)
+
 ---
 
 ## 🌟 What Was Built in Phase 2
